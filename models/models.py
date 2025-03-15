@@ -12,20 +12,12 @@ class Product:
     quantity: int
 
     def check_quantity(self, quantity) -> bool:
-        """
-        TODO Верните True если количество продукта больше или равно запрашиваемому
-            и False в обратном случае
-        """
+
         if quantity <= 0:
             raise ValueError("Должно быть положительное число")
         return self.quantity >= quantity
 
     def buy(self, quantity):
-        """
-        TODO реализуйте метод покупки
-            Проверьте количество продукта используя метод check_quantity
-            Если продуктов не хватает, то выбросите исключение ValueError
-        """
         if self.check_quantity(quantity):
             bought = self.quantity - quantity
             return bought
@@ -39,7 +31,7 @@ class Product:
 class Cart:
     """
     Класс корзины. В нем хранятся продукты, которые пользователь хочет купить.
-    TODO реализуйте все методы класса
+
     """
 
     # Словарь продуктов и их количество в корзине
@@ -80,7 +72,7 @@ class Cart:
             raise ValueError("Нет продуктов")
         total_price = 0
         for product, quantity in self.products.items():
-            total_price += product.price*self.products[product]
+            total_price += product.price * self.products[product]
         return total_price
 
     def buy(self):
@@ -93,4 +85,3 @@ class Cart:
             raise ValueError("Нет товаров в корзине")
         for product, quantity in self.products.items():
             product.buy(self.products[product])
-

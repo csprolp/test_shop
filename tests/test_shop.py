@@ -12,13 +12,16 @@ from models.models import Product, Cart
 def product():
     return Product("book", 100, "This is a book", 1000)
 
+
 @pytest.fixture
 def second_product():
     return Product("smth", 150, "This is awesome", 500)
 
+
 @pytest.fixture()
 def cart():
     return Cart()
+
 
 class TestProducts:
     """
@@ -33,12 +36,11 @@ class TestProducts:
 
     def test_product_buy(self, product):
         shop_have_products = product.quantity
-        assert product.buy(PRODUCTS_TO_BUY_SUCCESS) == shop_have_products-PRODUCTS_TO_BUY_SUCCESS
+        assert product.buy(PRODUCTS_TO_BUY_SUCCESS) == shop_have_products - PRODUCTS_TO_BUY_SUCCESS
 
     def test_product_buy_more_than_available(self, product):
         with pytest.raises(ValueError):
             product.buy(1001)
-
 
 
 class TestCart:
@@ -58,7 +60,7 @@ class TestCart:
         cart.remove_product(product=product, remove_count=3)
         assert cart.products[product] == 2
 
-    def test_remove_product_without_remove_count(self, product,cart):
+    def test_remove_product_without_remove_count(self, product, cart):
         cart.add_product(product=product, buy_count=DIGIT_FOR_BUYING)
         cart.remove_product(product=product)
         assert product not in cart.products
@@ -85,11 +87,10 @@ class TestCart:
         with pytest.raises(ValueError):
             cart.remove_product(product=product, remove_count=-5)
 
-    def test_remove_product_that_not_in_cart(self, product,cart, second_product):
+    def test_remove_product_that_not_in_cart(self, product, cart, second_product):
         cart.add_product(product=product, buy_count=DIGIT_FOR_BUYING)
         with pytest.raises(ValueError, match="Нет такого продукта в корзине"):
             cart.remove_product(product=second_product)
-
 
     def test_clear(self, product, cart, second_product):
         cart.add_product(product=product, buy_count=DIGIT_FOR_BUYING)
@@ -97,14 +98,14 @@ class TestCart:
         cart.clear()
         assert cart.products == {}
 
-    def test_get_price(self, product,cart):
+    def test_get_price(self, product, cart):
         cart.add_product(product=product, buy_count=DIGIT_FOR_BUYING)
-        assert cart.get_total_price() == product.price*DIGIT_FOR_BUYING
+        assert cart.get_total_price() == product.price * DIGIT_FOR_BUYING
 
     def test_get_price_for_two_products(self, product, cart, second_product):
         cart.add_product(product=product, buy_count=DIGIT_FOR_BUYING)
         cart.add_product(product=second_product)
-        assert cart.get_total_price() == product.price*DIGIT_FOR_BUYING+second_product.price
+        assert cart.get_total_price() == product.price * DIGIT_FOR_BUYING + second_product.price
 
     def test_get_price_without_products_in_cart(self, cart):
         with pytest.raises(ValueError, match="Нет продуктов"):
@@ -114,20 +115,19 @@ class TestCart:
         cart.add_product(product=product, buy_count=DIGIT_FOR_BUYING)
         cart.buy()
 
-    def test_buy_product_with_empty_cart(self,cart):
+    def test_buy_product_with_empty_cart(self, cart):
         with pytest.raises(ValueError, match="Нет товаров в корзине"):
             cart.buy()
 
-    def test_buy_product_without_quantity_in_shop(self,cart,product):
+    def test_buy_product_without_quantity_in_shop(self, cart, product):
         cart.add_product(product=product, buy_count=10000)
         with pytest.raises(ValueError, match="Нет столько товара"):
             cart.buy()
 
-    def test_buy_products(self,cart, product, second_product):
+    def test_buy_products(self, cart, product, second_product):
         cart.add_product(product=product, buy_count=DIGIT_FOR_BUYING)
         cart.add_product(product=second_product, buy_count=DIGIT_FOR_BUYING)
         cart.buy()
-
 
     """
     TODO Напишите тесты на методы класса Cart
